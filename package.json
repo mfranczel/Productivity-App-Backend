@@ -1,0 +1,23 @@
+{
+  "name": "productivity-app-backend",
+  "version": "1.0.0",
+  "description": "REST api for productivity app for MTAA",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mfranczel/Productivity-App-Backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mfranczel/Productivity-App-Backend/issues"
+  },
+  "homepage": "https://github.com/mfranczel/Productivity-App-Backend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mocha": "^8.3.2"
+  }
+}

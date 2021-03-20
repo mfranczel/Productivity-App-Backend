@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  mariadb:
+    image: mariadb:10.5.3
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=productivity_db
+    ports:
+      - 3306:3306
+    container_name: mariadb
+    expose:
+      - 3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+
+  adminer:
+    image: adminer
+    restart: always
+    depends_on: 
+      - mariadb
+    ports:
+      - 8080:8080
+
+  api:
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+    image: prod-app
+    depends_on: 
+      - mariadb
+    ports:
+      - 5000:5000

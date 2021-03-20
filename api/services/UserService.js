@@ -30,11 +30,19 @@ const login = async (email, password) => {
     var corr = await bcrypt.compare(password, user.password)
 
     if (corr) {
-        console.log(process.env.JWT_SECRET)
         var jwt_token = jwt.sign({id: user.id, email: user.email}, process.env.JWT_SECRET, {expiresIn: 86400*365})
         return jwt_token
     } 
     return corr
 }
 
-module.exports = {register: register, login: login}
+const getDetails = async (token) => {
+    console.log(jwt.decode(token).id)
+    var id = jwt.decode(token).id
+
+    var userDetails = await User.findByPk(id)
+
+    return userDetails
+}
+
+module.exports = {register: register, login: login, getDetails: getDetails}

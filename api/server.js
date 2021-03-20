@@ -4,7 +4,6 @@ const db = require('./config/db')
 const { Sequelize } = require('sequelize')
 
 const app = express()
-const secret = 'henlomyfriend123'
 
 db.sync({force: true})
 
@@ -13,6 +12,7 @@ db.authenticate()
     .catch(() => console.log('HMM, error...'))
 
 app.use(bodyParser.json())
+
 
 app.use('/user', require('./routes/Users'))
 app.get('/', (req, res) => {

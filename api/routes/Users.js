@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const UserService = require('../services/UserService')
+const {withJWTAuthMiddleware} = require('express-kun')
+
+const protectedRouter = withJWTAuthMiddleware(router, process.env.JWT_SECRET)
 
 router.post('/', (req, res) => {
     var {email, password, birthdate} = req.body
@@ -16,6 +19,17 @@ router.post('/', (req, res) => {
             console.log(err)
             res.sendStatus(500)
         })
+
+})
+
+protectedRouter.get('/', (req, res) => {
+    var user = UserService.getDetails(req.headers.authorization.split(' ')[1])
+
+    if (user) {
+        res.status(201).send(user)
+    } else {
+        res.sendStatus(400)
+    }
 
 })
 
@@ -35,5 +49,7 @@ router.post('/login', (req, res) => {
             res.sendStatus(500)
         })
 })
+
+
 
 module.exports = router

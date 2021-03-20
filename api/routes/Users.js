@@ -23,13 +23,17 @@ router.post('/', (req, res) => {
 })
 
 protectedRouter.get('/', (req, res) => {
-    var user = UserService.getDetails(req.headers.authorization.split(' ')[1])
-
-    if (user) {
-        res.status(201).send(user)
-    } else {
-        res.sendStatus(400)
-    }
+    UserService.getDetails(req.headers.authorization.split(' ')[1])
+        .then((u) => {
+            if (u) {
+                res.status(201).send(u)
+            } else {
+                res.sendStatus(400)
+            }
+        })
+        .catch((err) => {
+            res.status(500)
+        })
 
 })
 

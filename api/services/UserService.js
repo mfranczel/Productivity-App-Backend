@@ -1,30 +1,40 @@
 const db = require('../config/db')
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
+var jwt = require('jsonwebtoken');
 
 const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const register = (email, pass, birthdate) => {
-    var success = true
+const register = async (email, pass, birthdate) => {
 
-    User.findAll({where: {email: email}})
-        .then(users => {
-            
-            if (!(email && pass && birthdate) || users.length > 0 || !emailRe.test(String(email).toLowerCase()) || pass.length <= 5) {
-                success = false
-            }
+    var users = await User.findAll({where: {email: email}})
 
-            return bcrypt.hash(pass, 10)
-        })
-        .then(hp => {
-            User.create({email: email, password: hp, birth_date: birthdate})
-        })
-        .catch(err => {
-            console.log(err)
-            throw err
-        })
+    if (!(email && pass && birthdate) || users.length > 0 || !emailRe.test(String(email).toLowerCase()) || pass.length <= 5) {
+        return false
+    }
     
-    return success
+    var hp = await bcrypt.hash(pass, 10)
+    await User.create({email: email, password: hp, birth_date: birthdate})
+
+    return true
 }
 
-module.exports = {register: register}
+const login = async (email, password) => {
+
+    var user = await User.findOne({where: {email: email}})
+    
+    if (user == null) {
+        return false
+    }
+
+    var corr = await bcrypt.compare(password, user.password)
+
+    if (corr) {
+        console.log(process.env.JWT_SECRET)
+        var jwt_token = jwt.sign({id: user.id, email: user.email}, process.env.JWT_SECRET, {expiresIn: 86400*365})
+        return jwt_token
+    } 
+    return corr
+}
+
+module.exports = {register: register, login: login}

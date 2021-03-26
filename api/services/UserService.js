@@ -36,9 +36,7 @@ const login = async (email, password) => {
     return corr
 }
 
-const getDetails = async (token) => {
-    console.log(jwt.decode(token).id)
-    var id = jwt.decode(token).id
+const getDetails = async (id) => {
 
     var userDetails = await User.findByPk(id)
 

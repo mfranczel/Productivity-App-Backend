@@ -37,6 +37,18 @@ router.post('/login', (req, res) => {
         })
 })
 
+router.put('/', authMiddleware, (req, res) => {
+    var {email, password, birthDate, photo} = req.body
+
+    UserService.update(req.id, email, password, birthDate, photo)
+        .then(r => {
+            res.sendStatus(200)
+        })
+        .catch(err => {
+            res.sendStatus(500)
+        })
+})
+
 router.get('/', authMiddleware, (req, res) => {
     UserService.getDetails(req.id)
         .then((u) => {
@@ -50,6 +62,16 @@ router.get('/', authMiddleware, (req, res) => {
             res.status(500)
         })
 
+})
+
+router.delete('/', authMiddleware, (req, res) => {
+    UserService.remove(req.id)
+        .then(r => {
+            res.sendStatus(200)
+        })
+        .catch(err => {
+            res.sendStatus(500)
+        })
 })
 
 

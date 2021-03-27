@@ -15,6 +15,7 @@ app.use(bodyParser.json())
 
 
 app.use('/user', require('./routes/Users'))
+app.use('/habit', require('./routes/Habits'))
 app.get('/', (req, res) => {
     res.send("henlo")
 })

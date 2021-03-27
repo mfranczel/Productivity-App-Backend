@@ -43,4 +43,26 @@ const getDetails = async (id) => {
     return userDetails
 }
 
-module.exports = {register: register, login: login, getDetails: getDetails}
+const update = async (id, email, password, birthDate, photo) => {
+    password = await bcrypt.hash(password, 10)
+    User.findByPk(id)
+        .then(u => {
+            if (u) {
+                u.update({
+                    email: email,
+                    password: password,
+                    birth_date: birthDate,
+                    photo: photo
+                })
+            }
+        })
+}
+
+const remove = async (id) => {
+    await User.findByPk(id)
+        .then(u => {
+            u.destroy()
+        })
+}
+
+module.exports = {register: register, login: login, getDetails: getDetails, update: update, remove: remove}

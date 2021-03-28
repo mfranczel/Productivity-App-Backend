@@ -11,12 +11,11 @@ const getHabits = async (userId) => {
 
     var habits = await Habit.findAll({where: {userId: userId}, include: [
         {
-            model: HabitWeekdayTbd,
+            model: HabitWeekDayTbd,
         },
         {
             model: HabitDayDone,
         }]})
-    console.log(habits)
     return habits
 
 }  
@@ -53,4 +52,45 @@ const addHabit = async (userId, type, text, days) => {
 
 }
 
-module.exports = {addHabit: addHabit, getHabits: getHabits}
+const remove = async (userId, habitId) => {
+    Habit.findOne({where: {userId: userId, id: habitId}})
+        .then(r => {
+            r.destroy()
+        })
+}
+
+const addHabitLog = async (userId, habitId, action) => {
+    var habit = await Habit.findOne({where: {userId: userId, id: habitId}})
+    if (habit == null) {
+        throw "Habit with user id not found"
+    } else {
+        if (action === "complete") {
+            await HabitDayDone.create({
+                date: new Date(),
+                habitId: habitId
+            })
+        } else if (action === "undo") {
+            await HabitDayDone.findAll({where: {habitId: habitId}})
+                .then(h => {
+                    var found = false
+                    h.forEach(e => {
+                        var dateA = e.date.getFullYear() + "-" + (e.date.getMonth()+1) + "-" + e.date.getDate()
+                        var dateB = new Date().getFullYear() + "-" + (new Date().getMonth()+1) + "-" + new Date().getDate()
+
+                        if (dateA === dateB) {
+                            e.destroy()
+                            found = true
+                        }
+                    })
+                    if (!found) {
+                        throw "Habit completion not found"
+                    }
+                })
+                .catch(err => {
+                    throw err
+                })
+        }
+    }
+}
+
+module.exports = {addHabit: addHabit, getHabits: getHabits, remove: remove, addHabitLog: addHabitLog}

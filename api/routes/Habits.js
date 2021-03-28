@@ -11,7 +11,6 @@ router.post('/', authMiddleware, (req, res) => {
 })
 
 router.get('/', authMiddleware, (req, res) => {
-    console.log(req.id)
     HabitService.getHabits(req.id)
         .then(r => {
             res.status(200).send(r)
@@ -20,6 +19,27 @@ router.get('/', authMiddleware, (req, res) => {
             console.log(err)
             res.sendStatus(500)
         }) 
+})
+
+router.post('/:habitId', authMiddleware, (req, res) => {
+    HabitService.addHabitLog(req.id, req.params.habitId, req.body.action)
+        .then(r => {
+            res.sendStatus(200)
+        })
+        .catch(e => {
+            res.status(500).send(e)
+        })
+})
+
+router.delete('/:habitId', authMiddleware, (req, res) => {
+    HabitService.remove(req.id, req.params.habitId)
+        .then(r => {
+            res.sendStatus(200)
+        })
+        .catch(err => {
+            res.sendStatus(500)
+        })
+
 })
 
 

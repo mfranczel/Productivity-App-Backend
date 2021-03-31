@@ -18,7 +18,7 @@ var User = db.define('user', {
         allowNull: false
     },
     photo: {
-        type: Sequelize.BLOB('long'),
+        type: Sequelize.STRING('200'),
         allowNull: true
     }
 })

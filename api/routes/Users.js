@@ -14,7 +14,6 @@ router.post('/', (req, res) => {
             }
         })
         .catch(err => {
-            console.log(err)
             res.sendStatus(500)
         })
 
@@ -28,24 +27,27 @@ router.post('/login', (req, res) => {
             if (r) {
                 res.status(200).send({auth: true, token: r})
             } else {
-                res.sendStatus(401)
+                res.sendStatus(400)
             }
         })
         .catch(err => {
-            console.log(err)
             res.sendStatus(500)
         })
 })
 
 router.put('/', authMiddleware, (req, res) => {
-    var {email, password, birthDate, photo} = req.body
+    var {email, password, birthDate} = req.body
 
-    UserService.update(req.id, email, password, birthDate, photo)
+    UserService.update(req.id, email, password, birthDate)
         .then(r => {
             res.sendStatus(200)
         })
         .catch(err => {
-            res.sendStatus(500)
+            if (err == "invalid info") {
+                res.sendStatus(400)
+            } else {
+                res.sendStatus(500)
+            }
         })
 })
 
@@ -54,12 +56,14 @@ router.get('/', authMiddleware, (req, res) => {
         .then((u) => {
             if (u) {
                 res.status(201).send(u)
-            } else {
-                res.sendStatus(400)
-            }
+            } 
         })
         .catch((err) => {
-            res.status(500)
+            if (err == "user not found") {
+                res.sendStatus(400)
+            } else {
+                res.semdStatus(500)
+            }
         })
 
 })

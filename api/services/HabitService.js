@@ -6,8 +6,6 @@ const User = require('../models/User')
 
 
 const getHabits = async (userId) => {
-    var end = new Date()
-    var start = (new Date()).setDate(end.getDate() - 7)
 
     var habits = await Habit.findAll({where: {userId: userId}, include: [
         {
@@ -53,10 +51,13 @@ const addHabit = async (userId, type, text, days) => {
 }
 
 const remove = async (userId, habitId) => {
-    Habit.findOne({where: {userId: userId, id: habitId}})
-        .then(r => {
-            r.destroy()
-        })
+    var habit = await Habit.findOne({where: {userId: userId, id: habitId}})
+    
+    if (habit === null) {
+        throw "habit not found"
+    } else {
+        r.destroy()
+    }
 }
 
 const addHabitLog = async (userId, habitId, action) => {

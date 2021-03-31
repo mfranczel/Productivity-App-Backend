@@ -8,6 +8,9 @@ router.post('/', authMiddleware, (req, res) => {
         .then(r => {
             res.sendStatus(201)
         })
+        .catch(e => {
+            res.sendStatus(500)
+        })
 })
 
 router.get('/', authMiddleware, (req, res) => {
@@ -16,7 +19,6 @@ router.get('/', authMiddleware, (req, res) => {
             res.status(200).send(r)
         })
         .catch(err => {
-            console.log(err)
             res.sendStatus(500)
         }) 
 })
@@ -27,7 +29,11 @@ router.post('/:habitId', authMiddleware, (req, res) => {
             res.sendStatus(200)
         })
         .catch(e => {
-            res.status(500).send(e)
+            if (e == "Habit with user id not found") {
+                res.sendStatus(401)
+            } else {
+                res.sendStatus(400)
+            }
         })
 })
 
@@ -37,7 +43,11 @@ router.delete('/:habitId', authMiddleware, (req, res) => {
             res.sendStatus(200)
         })
         .catch(err => {
-            res.sendStatus(500)
+            if (err == "habit not found") {
+                res.sendStatus(400)
+            } else {
+                res.sendStatus(500)
+            }
         })
 
 })

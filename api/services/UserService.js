@@ -14,7 +14,7 @@ const register = async (email, pass, birthdate) => {
     }
     
     var hp = await bcrypt.hash(pass, 10)
-    await User.create({email: email, password: hp, birth_date: birthdate})
+    await User.create({email: email, password: hp, birth_date: birthdate, photo: "user.svg"})
 
     return true
 }
@@ -22,11 +22,6 @@ const register = async (email, pass, birthdate) => {
 const login = async (email, password) => {
 
     var user = await User.findOne({where: {email: email}})
-    
-    if (user == null) {
-        return false
-    }
-
     var corr = await bcrypt.compare(password, user.password)
 
     if (corr) {
@@ -40,7 +35,46 @@ const getDetails = async (id) => {
 
     var userDetails = await User.findByPk(id)
 
+    if (userDetails == null) {
+        throw "user not found"
+    }
+
     return userDetails
 }
 
-module.exports = {register: register, login: login, getDetails: getDetails}
+const update = async (id, email, password, birthDate) => {
+    if (!(email && password && birthDate) || !emailRe.test(String(email).toLowerCase()) || password.length <= 5) {
+        throw "invalid info"
+    }
+
+    password = await bcrypt.hash(password, 10)
+    var user = await User.findByPk(id)
+
+    console.log({user, email, password, birthDate})
+    
+    if (user) {
+        user.update({
+            email: email,
+            password: password,
+            birth_date: birthDate,
+        })
+        .then()
+        .catch((er) => console.log(err))
+    }
+}
+
+const updateImage = async (id, photo) => {
+    var user = await User.findByPk(id)
+    user.update({
+        photo: photo
+    })
+}
+
+const remove = async (id) => {
+    await User.findByPk(id)
+        .then(u => {
+            u.destroy()
+        })
+}
+
+module.exports = {register: register, login: login, getDetails: getDetails, update: update, remove: remove, updateImage: updateImage}

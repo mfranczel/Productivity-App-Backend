@@ -1,9 +1,10 @@
 const Sequelize = require('sequelize')
 const db = require('../config/db')
+const Habit = require('./habits/Habit')
 
 
 // created_at and modified_at are managed automatically by sequelize
-module.exports = db.define('users', {
+var User = db.define('user', {
     email: {
         type: Sequelize.STRING(200),
         allowNull: false
@@ -17,7 +18,11 @@ module.exports = db.define('users', {
         allowNull: false
     },
     photo: {
-        type: Sequelize.BLOB('long'),
+        type: Sequelize.STRING('200'),
         allowNull: true
     }
 })
+
+User.hasMany(Habit, {as: 'Habits'})
+
+module.exports = User

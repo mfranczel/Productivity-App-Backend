@@ -13,6 +13,7 @@ app.use(bodyParser.json())
 
 
 app.use('/user', require('./routes/Users'))
+app.use('/todo', require('./routes/Tasks'))
 app.use('/habit', require('./routes/Habits'))
 app.use('/pic', require('./routes/Pics'))
 

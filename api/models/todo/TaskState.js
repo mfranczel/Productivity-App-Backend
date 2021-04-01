@@ -9,15 +9,11 @@ const MAX_STATE = 2;
 
 var TaskState = db.define('task_state', 
 {
-    day: 
-    {
+    state: 
+    {   
         type: Sequelize.INTEGER,
-        allowNull: false,
-        validate: 
-        {
-            min: MIN_STATE,
-            max: MAX_STATE
-        }
+        min: MIN_STATE,
+        max: MAX_STATE
     }
 })
 

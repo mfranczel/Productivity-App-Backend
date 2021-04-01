@@ -16,17 +16,12 @@ var Task =  db.define('task', {
         //note: text is title (maybe - refactoring)
         type: Sequelize.STRING(200),
         allowNull: false
-    },
-    date: 
-    {
-        // created_at and modified_at 
-        // are managed automatically
-        // by Sequelize
-        type: Sequelize.DATE,
-        allowNull: false
     }
+    // created_at and modified_at 
+    // are managed automatically
+    // by Sequelize
 })
 
-Task.hasMany(TaskState)
+Task.hasOne(TaskState)
 
-module.exports = Habit
+module.exports = Task

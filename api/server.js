@@ -15,6 +15,10 @@ app.use(bodyParser.json())
 
 
 app.use('/user', require('./routes/Users'))
+
+app.use('/todo', require('./routes/Tasks'))
+
+
 app.get('/', (req, res) => {
     res.send("henlo")
 })

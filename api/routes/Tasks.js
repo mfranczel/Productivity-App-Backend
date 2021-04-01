@@ -14,8 +14,10 @@ router.post('/', authMiddleware, (req, res) => { //
     })
 })
 
-router.get('/', authMiddleware, (req, res) => { //
-    TaskService.getTasks(req.id, req.body.type)
+router.get('/:type', authMiddleware, (req, res) => { //
+    console.log("here IAM")
+    
+    TaskService.getTasks(req.id, req.params.type)
         .then( r => {
             res.status(200).send(r)
         })
@@ -24,6 +26,7 @@ router.get('/', authMiddleware, (req, res) => { //
             res.sendStatus(500)
         }) 
 })
+
 
 router.delete('/:taskId', authMiddleware, (req, res) => {
     TaskService.remove(req.id, req.params.taskId)
@@ -40,7 +43,7 @@ router.delete('/:taskId', authMiddleware, (req, res) => {
 router.put('/:taskId', authMiddleware, (req, res) => {
     TaskService.changeState(req.id, req.params.taskId, any)
     .then( r => {
-        res.sendStatus(200)
+        res.sendStatus(201)
     })
     .catch( err => {
         console.log(err)

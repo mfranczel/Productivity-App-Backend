@@ -3,8 +3,8 @@ const Task = require('../models/todo/Task')
 const TaskState = require('../models/todo/TaskState')
 const User = require('../models/User')
 
-//gets task according to:
-// user and type (e.g. mothly, weekly, mounthly)
+// //gets task according to:
+// // user and type (e.g. mothly, weekly, mounthly)
 const getTasks = async (userId, type) => {
     var tasks = await Task.findAll({where: {userId: userId, type: type},
         include: [
@@ -17,14 +17,15 @@ const getTasks = async (userId, type) => {
 }  
 
 
+
+
 //adds Task into Todo 
 const addTask = async (userId, type, text) => {
     await Task.create(
         {
         type: type,
         text: text,
-        userId: userId,
-        date: new Date()
+        userId: userId
     })
 }
 
@@ -85,19 +86,33 @@ const stats = async (userId, type) => {
                 model: TaskState,
             }
         ]
-    }) 
+    })    
 
     if (tasks == null) {
-        throw "Empty tasks"
+        return [0,0,0]
     } 
     else {
 
-        //tasks todo
+        var val_arr = [0,0,0]
+
+        tasks.forEach(function (item, index) {
+
+            if( item.TaskState.state == 0 ) {
+                val_arr[0] = val_arr[0] + 1
+            }
+            else if (item.TaskState.state == 1) {
+                val_arr[1] = val_arr[1] + 1
+            }else {
+                val_arr[2] = val_arr[2] + 1
+            }
+        }); 
+
+        return val_arr
     }
 }  
 
-
-module.exports = { 
+module.exports = 
+{ 
     addTask: addTask,
     getTasks: getTasks,
     remove: remove, 

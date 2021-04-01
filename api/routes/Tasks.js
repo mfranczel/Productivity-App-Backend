@@ -3,44 +3,49 @@ const router = express.Router()
 const authMiddleware = require('../middleware/authMiddleware')
 const TaskService = require('../services/TaskService')
 
-router.post('/', authMiddleware, (req, res) => {
-    HabitService.addHabit(req.id, req.body.type, req.body.text, req.body.days)
-        .then(r => {
-            res.sendStatus(201)
-        })
+router.post('/', authMiddleware, (req, res) => { //
+    TaskService.addTask(req.id, req.body.type, req.body.text)
+    .then( r => {
+        res.sendStatus(201)
+    })
+    .catch( err => {
+        console.log(err)
+        res.sendStatus(500)
+    })
 })
 
-router.get('/', authMiddleware, (req, res) => {
-    HabitService.getHabits(req.id)
-        .then(r => {
+router.get('/', authMiddleware, (req, res) => { //
+    TaskService.getTasks(req.id, req.body.type)
+        .then( r => {
             res.status(200).send(r)
         })
-        .catch(err => {
+        .catch( err => {
             console.log(err)
             res.sendStatus(500)
         }) 
 })
 
-router.post('/:habitId', authMiddleware, (req, res) => {
-    HabitService.addHabitLog(req.id, req.params.habitId, req.body.action)
-        .then(r => {
-            res.sendStatus(200)
-        })
-        .catch(e => {
-            res.status(500).send(e)
-        })
+router.delete('/:taskId', authMiddleware, (req, res) => {
+    TaskService.remove(req.id, req.params.taskId)
+    .then( r => {
+        res.sendStatus(200)
+    })
+    .catch( err => {
+        console.log(err)
+        res.sendStatus(500)
+    }) 
 })
 
-router.delete('/:habitId', authMiddleware, (req, res) => {
-    HabitService.remove(req.id, req.params.habitId)
-        .then(r => {
-            res.sendStatus(200)
-        })
-        .catch(err => {
-            res.sendStatus(500)
-        })
-
+//changeState
+router.put('/:taskId', authMiddleware, (req, res) => {
+    TaskService.changeState(req.id, req.params.taskId, any)
+    .then( r => {
+        res.sendStatus(200)
+    })
+    .catch( err => {
+        console.log(err)
+        res.sendStatus(500)
+    }) 
 })
-
 
 module.exports = router

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const UserService = require('../services/UserService')
 
 const auth = (req, res, next) => {
     if (req.headers.authorization) {
@@ -6,10 +7,16 @@ const auth = (req, res, next) => {
 
         jwt.verify(token, process.env.JWT_SECRET, (err, d) => {
             if (err) {
-                res.sendStatus(400)
+                res.sendStatus(401)
             } else {
-                req.id = d.id
-                next()
+                UserService.getDetails(d.id)
+                    .then(r => {
+                        req.id = d.id
+                        next()
+                    })
+                    .catch(e => {
+                        res.sendStatus(401)
+                    })
             }
         })
     } else {

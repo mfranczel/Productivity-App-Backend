@@ -56,7 +56,7 @@ const remove = async (userId, habitId) => {
     if (habit === null) {
         throw "habit not found"
     } else {
-        r.destroy()
+        await habit.destroy()
     }
 }
 

@@ -30,7 +30,7 @@ foo@bar:~$ docker-compose up
 - Pri databázovom diagrame pridané created_at, modified_at (sequelize), typ pri habit zmenený na enum v sequelize (v diagrame string)
 - Typ pri task zmenený na enum v sequelize (v diagrame string)
 - Zrusenie todo_item table a zlucenie informacie z nej do todo_list (bola redundantna informacie z nej boli duplicitne napriklad created_at aj modified_at)
-- TaskState obsauje len state
+- TaskState obsahuje len state
 
 
 ## Dátový model

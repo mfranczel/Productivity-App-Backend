@@ -55,7 +55,7 @@ router.get('/', authMiddleware, (req, res) => {
     UserService.getDetails(req.id)
         .then((u) => {
             if (u) {
-                res.status(201).send(u)
+                res.status(200).send(u)
             } 
         })
         .catch((err) => {

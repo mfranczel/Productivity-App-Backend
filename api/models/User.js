@@ -18,7 +18,7 @@ var User = db.define('user', {
         allowNull: false
     },
     photo: {
-        type: Sequelize.STRING('200'),
+        type: Sequelize.STRING(200),
         allowNull: true
     }
 })

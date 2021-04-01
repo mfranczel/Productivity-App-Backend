@@ -14,9 +14,19 @@ router.post('/', authMiddleware, (req, res) => { //
     })
 })
 
-router.get('/:type', authMiddleware, (req, res) => { //
-    console.log("here IAM")
-    
+router.get('/stats/:type', authMiddleware, (req, res) => { 
+    TaskService.stats(req.id, req.params.type)
+        .then( r => {
+            res.status(200).send(r)
+        })
+        .catch( err => {
+            console.log(err)
+            res.sendStatus(500)
+        }) 
+})
+
+
+router.get('/:type', authMiddleware, (req, res) => { 
     TaskService.getTasks(req.id, req.params.type)
         .then( r => {
             res.status(200).send(r)
@@ -41,7 +51,7 @@ router.delete('/:taskId', authMiddleware, (req, res) => {
 
 //changeState
 router.put('/:taskId', authMiddleware, (req, res) => {
-    TaskService.changeState(req.id, req.params.taskId, any)
+    TaskService.changeState(req.id, req.params.taskId, "upvote") //testing temp hardcoded
     .then( r => {
         res.sendStatus(201)
     })

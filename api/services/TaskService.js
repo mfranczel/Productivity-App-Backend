@@ -12,7 +12,8 @@ const getTasks = async (userId, type) => {
                 model: TaskState,
             }
         ]
-    })    
+    })
+    console.log(tasks)    
     return tasks
 }  
 
@@ -21,20 +22,25 @@ const getTasks = async (userId, type) => {
 
 //adds Task into Todo 
 const addTask = async (userId, type, text) => {
-    await Task.create(
+    var task = await Task.create(
         {
         type: type,
         text: text,
         userId: userId
     })
+    await TaskState.create({
+        state: 0,
+        taskId: task.id
+    })
 }
 
 //remove Task from Todo
 const remove = async (userId, taskId) => {
-    Task.findOne({where: {userId: userId, id: taskId}})
-        .then(r => {
-            r.destroy()
-        })
+    var task = await Task.findOne({where: {userId: userId, id: taskId}})
+    if (task == null) {
+        throw "error :<"
+    }
+    await task.destroy()
 }
 
 
@@ -53,24 +59,22 @@ const changeState = async (userId, taskId, action) => {
     }
     else {
         if (action === "upvote") {
-            if ((task.TaskState.state + 1) > 3) { // idk if it works
+            if ((task.task_state.state + 1) > 2) { // idk if it works
                 return
             }
             else {
-                await TaskState.create({
-                    date: new Date(),
-                    habitId: task.TaskState.state + 1
+                task.task_state.update({
+                    state: task.task_state.state + 1
                 })
             } 
         }
         else if (action === "downvote") {
-            if ((task.TaskState.state - 1) < 0) { //idk if it works 
+            if ((task.task_state.state - 1) < 0) { 
                 return
             }
             else {
-                await TaskState.create({
-                    date: new Date(),
-                    habitId: task.TaskState.state - 1
+                task.task_state.update({
+                    state: task.task_state.state - 1
                 })
             } 
         }
@@ -97,10 +101,10 @@ const stats = async (userId, type) => {
 
         tasks.forEach(function (item, index) {
 
-            if( item.TaskState.state == 0 ) {
+            if( item.task_state.state == 0 ) {
                 val_arr[0] = val_arr[0] + 1
             }
-            else if (item.TaskState.state == 1) {
+            else if (item.task_state.state == 1) {
                 val_arr[1] = val_arr[1] + 1
             }else {
                 val_arr[2] = val_arr[2] + 1

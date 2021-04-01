@@ -13,7 +13,8 @@ var TaskState = db.define('task_state',
     {   
         type: Sequelize.INTEGER,
         min: MIN_STATE,
-        max: MAX_STATE
+        max: MAX_STATE,
+        allowNull: false
     }
 })
 

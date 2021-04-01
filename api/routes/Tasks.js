@@ -51,9 +51,9 @@ router.delete('/:taskId', authMiddleware, (req, res) => {
 
 //changeState
 router.put('/:taskId', authMiddleware, (req, res) => {
-    TaskService.changeState(req.id, req.params.taskId, "upvote") //testing temp hardcoded
+    TaskService.changeState(req.id, req.params.taskId, req.body.action)
     .then( r => {
-        res.sendStatus(201)
+        res.sendStatus(200)
     })
     .catch( err => {
         console.log(err)

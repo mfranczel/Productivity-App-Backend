@@ -31,5 +31,6 @@ services:
       - mariadb
     ports:
       - 5000:5000
+      - 8082:8082
     environment: 
       - JWT_SECRET="idklolwhateverclevelsecret"

@@ -18,15 +18,18 @@ const getHabits = async (userId) => {
 
 }  
 
-const addHabit = async (userId, type, text, days) => {
+const addHabit = async (userId, type, text, days, dds) => {
 
     if (type === "monthly") {
-        await Habit.create({
+        var habit = await Habit.create({
             type: type,
             text: text,
             userId: userId,
             repetitions: days
         })
+
+
+
     } else if (type === "weekly") {
         var habit = await Habit.create({
             type: type,
@@ -40,12 +43,15 @@ const addHabit = async (userId, type, text, days) => {
                 habitId: habit.id
             })
         }
+
+
     } else {
-        await Habit.create({
+        var habit = await Habit.create({
             type: type,
             text: text,
             userId: userId
         })
+
     }
 
 }

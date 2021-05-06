@@ -20,6 +20,7 @@ const upload = multer({ storage: storage})
 router.get('/', authMiddleware, (req, res) => {
     UserService.getDetails(req.id)
         .then(u => {
+            console.log(path.resolve(__dirname,'../profile_pics/',u.photo))
             res.sendFile(path.resolve(__dirname,'../profile_pics/',u.photo) )
         })
         .catch(e => {

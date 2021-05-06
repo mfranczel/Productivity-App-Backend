@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/authMiddleware')
 const HabitService = require('../services/HabitService')
 
 router.post('/', authMiddleware, (req, res) => {
-    HabitService.addHabit(req.id, req.body.type, req.body.text, req.body.days)
+    HabitService.addHabit(req.id, req.body.type, req.body.text, req.body.days, req.body.habit_day_dones)
         .then(r => {
             res.sendStatus(201)
         })

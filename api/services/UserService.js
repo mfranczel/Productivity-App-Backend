@@ -14,7 +14,7 @@ const register = async (email, pass, birthdate) => {
     }
     
     var hp = await bcrypt.hash(pass, 10)
-    await User.create({email: email, password: hp, birth_date: birthdate, photo: "user.svg"})
+    await User.create({email: email, password: hp, birth_date: birthdate, photo: "user.jpg"})
 
     return true
 }

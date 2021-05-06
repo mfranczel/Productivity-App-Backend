@@ -13,6 +13,9 @@ foo@bar:~$ docker-compose up
 
 ## Zmeny
 
+### Bonus
+- pridaný WS
+
 ### Backendové testy
 
 - Pri teste 2 (Zmena používateľských údajov) mením email namiesto hesla kvôli tomu, že sa nedá zo servera retrievnúť. Je zmenený na mail bez @, čo by taktiež malo zamietnuť.
